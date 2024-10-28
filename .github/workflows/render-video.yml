@@ -25,9 +25,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
 
       - name: Install Dependencies
         run: npm install
@@ -37,7 +37,7 @@ jobs:
 
       - name: Render Video with Remotion
         run: |
-          npx remotion render src/index.tsx \
+          npx remotion render \
             --output=${{ github.event.inputs.outputPath }} \
             --codec=${{ github.event.inputs.videoFormat }} \
             --durationInFrames=${{ github.event.inputs.videoLength }} \
