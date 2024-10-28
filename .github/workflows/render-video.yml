@@ -36,8 +36,7 @@ jobs:
         run: npm run build
 
  - name: Render Video with Remotion
-      run: |
-        npx remotion render HelloWorld \
+      run: npx remotion render src/index.tsx \
           --output=${{ github.event.inputs.outputPath }} \
           --codec=h264 \  # changed from mp4 to h264
           --durationInFrames=${{ github.event.inputs.videoLength }} \
