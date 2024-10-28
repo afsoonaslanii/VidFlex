@@ -9,12 +9,12 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3 # Updated to v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3 # Updated to v3
         with:
-          node-version: "16" # Specify the version of Node.js
+          node-version: "20" # Set to Node.js 20
 
       - name: Install dependencies
         run: npm install
@@ -31,7 +31,7 @@ jobs:
         run: node render-video.js
 
       - name: Upload Rendered Video
-        uses: actions/upload-artifact@v3 # Updated to v3
+        uses: actions/upload-artifact@v3 # Using latest version
         with:
           name: rendered-video
           path: ./out/video.mp4
