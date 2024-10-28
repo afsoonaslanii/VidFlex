@@ -1,37 +1,17 @@
-name: Render Remotion Video
-
-on:
-  workflow_dispatch: # Allows you to manually trigger the workflow from GitHub
-
+name: Render video
+on: push
 jobs:
-  render-video:
+  render:
+    name: Render video
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v3 # Updated to v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3 # Updated to v3
+      - uses: actions/checkout@main
+      - uses: actions/setup-node@main
+      - run: sudo apt update
+      - run: sudo apt install ffmpeg
+      - run: npm i
+      - run: npm run build
+      - uses: actions/upload-artifact@v2
         with:
-          node-version: "20" # Set to Node.js 20
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build Remotion project
-        run: npm run build
-
-      - name: Start Remotion server
-        run: |
-          npm start &
-          sleep 5 # Wait for server to start
-
-      - name: Render video
-        run: node render-video.js
-
-      - name: Upload Rendered Video
-        uses: actions/upload-artifact@v3 # Using latest version
-        with:
-          name: rendered-video
-          path: ./out/video.mp4
+          name: out.mp4
+          path: out.mp4
