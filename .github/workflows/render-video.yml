@@ -35,15 +35,16 @@ jobs:
       - name: Build Remotion Project
         run: npm run build
 
- - name: Render Video with Remotion
-      run: npx remotion render src/index.tsx \
-          --output=${{ github.event.inputs.outputPath }} \
-          --codec=h264 \  # changed from mp4 to h264
-          --durationInFrames=${{ github.event.inputs.videoLength }} \
-          --imageFormat=jpeg \
-          --overwrite
-      env:
-        FFmpeg_PATH: /usr/bin/ffmpeg
+      - name: Render Video with Remotion
+        run: |
+          npx remotion render src/index.tsx \
+            --output=${{ github.event.inputs.outputPath }} \
+            --codec=h264 \
+            --durationInFrames=${{ github.event.inputs.videoLength }} \
+            --imageFormat=jpeg \
+            --overwrite
+        env:
+          FFmpeg_PATH: /usr/bin/ffmpeg
 
       - name: Upload Rendered Video
         uses: actions/upload-artifact@v3
