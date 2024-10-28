@@ -1,17 +1,53 @@
-name: Render video
-on: push
+name: Render Video
+
+on:
+  workflow_dispatch:
+    inputs:
+      videoFormat:
+        description: "Specify video format (e.g., mp4)"
+        required: true
+        default: "mp4"
+      videoLength:
+        description: "Length of the video in seconds"
+        required: true
+        default: "60"
+      outputPath:
+        description: "Path for the output file"
+        required: true
+        default: "./output/video.mp4"
+
 jobs:
   render:
-    name: Render video
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@main
-      - uses: actions/setup-node@main
-      - run: sudo apt update
-      - run: sudo apt install ffmpeg
-      - run: npm i
-      - run: npm run build
-      - uses: actions/upload-artifact@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          name: out.mp4
-          path: out.mp4
+          node-version: "18"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Remotion Project
+        run: npm run build
+
+      - name: Render Video with Remotion
+        run: |
+          npx remotion render src/index.tsx \
+            --output=${{ github.event.inputs.outputPath }} \
+            --codec=${{ github.event.inputs.videoFormat }} \
+            --durationInFrames=${{ github.event.inputs.videoLength }} \
+            --imageFormat=jpeg \
+            --overwrite
+        env:
+          FFmpeg_PATH: /usr/bin/ffmpeg
+
+      - name: Upload Rendered Video
+        uses: actions/upload-artifact@v3
+        with:
+          name: rendered-video
+          path: ${{ github.event.inputs.outputPath }}
