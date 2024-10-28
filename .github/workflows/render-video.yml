@@ -31,7 +31,7 @@ jobs:
         run: node render-video.js
 
       - name: Upload Rendered Video
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3 # Updated to v3
         with:
           name: rendered-video
           path: ./out/video.mp4
